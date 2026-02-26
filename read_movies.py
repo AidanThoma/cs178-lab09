@@ -52,7 +52,7 @@ def print_all_movies():
     for movie in items:
         print_movie(movie)
 
-def get_movie_by_title(movie):
+def get_movie_by_title():
     title_name = input("What is the name of the movie title: ")
     table = get_table()
     
