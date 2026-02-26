@@ -53,15 +53,31 @@ def print_all_movies():
         print_movie(movie)
 
 def get_movie_by_title(movie):
-    tite_input = input("What is the movie title you would like to search for: ")
-    title = movie.get(tite_input, "Unknown Title")
-
-    print(f"  Title : {title}")
+    title_name = input("What is the name of the movie title: ")
+    table = get_table()
+    
+    # scan() retrieves ALL items in the table.
+    # For large tables you'd use query() instead — but for our small
+    # dataset, scan() is fine.
+    response = table.scan(
+        FilterExpression="Title = :val",
+        ExpressionAttributeValues={":val": title_name}
+    )
+    items = response.get("Items", [])
+    
+    if not items:
+        print("No movies found. Make sure your DynamoDB table has data.")
+        return
+    
+    print(f"Found {len(items)} movie(s):\n")
+    for movie in items:
+        print_movie(movie)
 
 
 def main():
     print("===== Reading from DynamoDB =====\n")
-    print_all_movies()
+    #print_all_movies()
+    get_movie_by_title()
 
 
 if __name__ == "__main__":
